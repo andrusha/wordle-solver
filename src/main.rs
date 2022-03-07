@@ -160,6 +160,7 @@ fn match_patterns_simd(words: &[Word], patterns: &SimdPatterns) -> [usize; PATTE
 #[cfg(test)]
 mod tests {
     use crate::{all_patterns, all_simd_patterns, all_words, match_patterns, match_patterns_simd};
+    use pretty_assertions::assert_eq;
     use std::collections::HashSet;
 
     const KNOWN_WORD: &str = "sorel";

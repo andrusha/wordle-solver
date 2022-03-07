@@ -101,6 +101,7 @@ impl Fivegram {
 
 #[cfg(test)]
 mod tests {
+    use pretty_assertions::assert_eq;
     use proptest::prelude::*;
 
     use crate::simd_pattern::Simd;

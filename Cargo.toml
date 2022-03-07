@@ -12,3 +12,4 @@ core_simd = { git = "https://github.com/rust-lang/portable-simd" }
 
 [dev-dependencies]
 proptest = "1.0.0"
+pretty_assertions = "1.1.0"

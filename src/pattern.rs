@@ -76,6 +76,7 @@ impl Pattern {
 
 #[cfg(test)]
 mod tests {
+    use pretty_assertions::assert_eq;
     use std::collections::HashSet;
 
     use crate::{AsciiBitSet, Pattern, Word};

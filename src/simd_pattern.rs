@@ -82,6 +82,7 @@ mod tests {
     use crate::word::wordbytes_from_str;
     use crate::{Pattern, SimdPattern, Word};
     use core_simd::Simd;
+    use pretty_assertions::assert_eq;
     use proptest::prelude::*;
 
     #[test]

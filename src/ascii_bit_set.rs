@@ -65,6 +65,8 @@ impl AsciiBitSet {
 
 #[cfg(test)]
 mod tests {
+    use pretty_assertions::assert_eq;
+
     use std::collections::HashSet;
 
     use proptest::prelude::*;
