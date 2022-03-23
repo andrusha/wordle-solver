@@ -4,7 +4,7 @@ use std::fmt::{Display, Formatter};
 /**
     Lower-case ASCII bit-set, to quickly check if letter i
 **/
-#[derive(Debug, Default, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(transparent)]
 pub struct AsciiBitSet {
     pub set: u32,

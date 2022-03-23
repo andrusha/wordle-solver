@@ -12,29 +12,32 @@ pub fn wordbytes_from_str(s: &str) -> WordBytes {
     bytes
 }
 
+pub fn wordbytes_to_str(wb: &WordBytes) -> String {
+    wb.iter().map(|&c| char::from(c)).collect()
+}
+
 /**
 Pre-computed word bit-packing as well as letter hash
 **/
-#[derive(Default, Debug, Copy, Clone)]
+#[derive(Default, Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct Word {
-    pub bytes: WordBytes,
     pub fivegram: Fivegram,
     pub letters: AsciiBitSet,
 }
 
 impl Word {
-    pub fn to_str(&self) -> String {
-        self.bytes.iter().map(|&c| char::from(c)).collect()
-    }
-
+    #[cfg(test)]
     pub fn from_str(s: &str) -> Word {
         let bytes = wordbytes_from_str(s);
 
+        Word::from_wordbytes(&bytes)
+    }
+
+    pub fn from_wordbytes(wb: &WordBytes) -> Word {
         Word {
-            bytes,
-            fivegram: Fivegram::from_bytes(&bytes),
-            letters: AsciiBitSet::from_bytes(&bytes),
+            fivegram: Fivegram::from_bytes(wb),
+            letters: AsciiBitSet::from_bytes(wb),
         }
     }
 }

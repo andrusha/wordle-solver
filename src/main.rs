@@ -1,6 +1,8 @@
 #![feature(portable_simd)]
 #![feature(int_roundings)]
 
+extern crate core;
+
 use clap::{ArgEnum, Parser};
 use rayon::prelude::*;
 
@@ -11,10 +13,12 @@ use word::Word;
 
 use crate::pattern::PATTERN_COUNT;
 use crate::simd_pattern::{FreqSimd, SimdPattern, SimdPatterns, SIMD_WIDTH};
+use crate::word::{wordbytes_from_str, wordbytes_to_str, WordBytes};
 
 mod ascii_bit_set;
 mod fivegram;
 mod pattern;
+mod shader;
 mod simd_pattern;
 mod word;
 
@@ -24,6 +28,7 @@ const WORD_COUNT: usize = 12972;
 enum Implementation {
     CPU,
     SIMD,
+    GPU,
 }
 
 #[derive(Parser)]
@@ -38,8 +43,8 @@ fn main() {
 
     let now = std::time::Instant::now();
 
-    let all_words = all_words();
-    let all_patterns = all_patterns(&all_words);
+    let (all_bytes, all_words) = all_words();
+    let all_patterns = all_patterns(&all_bytes);
 
     let infs: Vec<f32>;
     match cli.implementation {
@@ -50,33 +55,37 @@ fn main() {
             let all_simd_patterns = all_simd_patterns(&all_patterns);
             infs = match_freq_simd(&all_words, &all_simd_patterns);
         }
+        Implementation::GPU => {
+            infs = futures::executor::block_on(shader::match_freq(&all_words, &all_patterns))
+                .expect("Failed to compute shader");
+        }
     }
 
     let idx = top_k_indices::<10>(&infs);
 
     println!("Top choices by information gain:");
     for i in idx {
-        println!("{}: {}", all_words[i].to_str(), infs[i]);
+        println!("{}: {}", wordbytes_to_str(&all_bytes[i]), infs[i]);
     }
 
     let time = now.elapsed().as_millis();
     println!("Time: {}ms", time);
 }
 
-fn all_words() -> Vec<Word> {
+fn all_words() -> (Vec<WordBytes>, Vec<Word>) {
     include_str!("../dict.txt")
         .lines()
-        .map(Word::from_str)
-        .collect()
+        .map(|s| {
+            let bytes = wordbytes_from_str(s);
+            (bytes, Word::from_wordbytes(&bytes))
+        })
+        .unzip()
 }
 
-fn all_patterns(words: &[Word]) -> Vec<Patterns> {
+fn all_patterns(words: &[WordBytes]) -> Vec<Patterns> {
     let words = &words[0..WORD_COUNT];
 
-    words
-        .iter()
-        .map(|word| Pattern::from_bytes(&word.bytes))
-        .collect()
+    words.iter().map(|word| Pattern::from_bytes(word)).collect()
 }
 
 fn all_simd_patterns(patterns: &[Patterns]) -> Vec<SimdPatterns> {
@@ -177,8 +186,8 @@ mod tests {
 
     #[test]
     fn known_bins_cpu() {
-        let words = all_words();
-        let patterns = all_patterns(&words);
+        let (bytes, words) = all_words();
+        let patterns = all_patterns(&bytes);
 
         let sorel_idx = words
             .iter()
@@ -202,8 +211,8 @@ mod tests {
 
     #[test]
     fn known_bins_simd() {
-        let words = all_words();
-        let patterns = all_patterns(&words);
+        let (bytes, words) = all_words();
+        let patterns = all_patterns(&bytes);
         let simd_patterns = all_simd_patterns(&patterns);
 
         let sorel_idx = words

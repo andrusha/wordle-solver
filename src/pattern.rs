@@ -17,7 +17,7 @@ Possible situations:
 Cases ignored:
 - Repeated letter, one is at known position
  **/
-#[derive(Debug, Default, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct Pattern {
     pub match_word: Fivegram,

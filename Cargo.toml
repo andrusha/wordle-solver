@@ -11,6 +11,7 @@ rayon = "1.5.1"
 core_simd = { git = "https://github.com/rust-lang/portable-simd", rev = "cad74346fb8f55f0e3a7dc7c4b64b56681d8ee2b" }
 futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
 wgpu = { git = "https://github.com/gfx-rs/wgpu", features = ["spirv", "vulkan-portability"] }
+bytemuck = { version = "1.8.0", features = ["derive", "min_const_generics"]}
 
 [dev-dependencies]
 proptest = "1.0.0"

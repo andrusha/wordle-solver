@@ -11,7 +11,7 @@ pub const FIVEGRAM: usize = 5;
     ...
     z     = 0b11010
 **/
-#[derive(Debug, Default, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
 #[repr(C)]
 pub struct Fivegram {
     pub word: u32,
