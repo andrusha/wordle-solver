@@ -1050,7 +1050,7 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 [[package]]
 name = "rustc_codegen_spirv"
 version = "0.4.0-alpha.12"
-source = "git+https://github.com/EmbarkStudios/rust-gpu#a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23"
+source = "git+https://github.com/EmbarkStudios/rust-gpu?rev=a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23#a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23"
 dependencies = [
  "ar",
  "bimap",
@@ -1167,7 +1167,7 @@ dependencies = [
 [[package]]
 name = "spirv-builder"
 version = "0.4.0-alpha.12"
-source = "git+https://github.com/EmbarkStudios/rust-gpu#a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23"
+source = "git+https://github.com/EmbarkStudios/rust-gpu?rev=a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23#a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23"
 dependencies = [
  "memchr",
  "raw-string",

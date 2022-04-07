@@ -18,4 +18,4 @@ proptest = "1.0.0"
 pretty_assertions = "1.1.0"
 
 [build-dependencies]
-spirv-builder = { git = "https://github.com/EmbarkStudios/rust-gpu" }
+spirv-builder = { git = "https://github.com/EmbarkStudios/rust-gpu", rev = "a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23" }

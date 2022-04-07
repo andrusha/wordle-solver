@@ -7,5 +7,4 @@ edition = "2021"
 crate-type = ["dylib", "lib"]
 
 [dependencies]
-spirv-std = { git = "https://github.com/EmbarkStudios/rust-gpu", features = ["glam"] }
-#wordle-solve = { path = "../" }
+spirv-std = { git = "https://github.com/EmbarkStudios/rust-gpu", features = ["glam"], rev = "a75d6e31c1350404570c5b8bc4ac3f5a21cd2a23" }

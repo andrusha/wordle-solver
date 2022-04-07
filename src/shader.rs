@@ -63,6 +63,26 @@ pub async fn match_freq(
                     ty: wgpu::BufferBindingType::Storage { read_only: false },
                 },
             },
+            wgpu::BindGroupLayoutEntry {
+                binding: 1,
+                count: None,
+                visibility: wgpu::ShaderStages::COMPUTE,
+                ty: wgpu::BindingType::Buffer {
+                    has_dynamic_offset: false,
+                    min_binding_size: Some(NonZeroU64::new(1).unwrap()),
+                    ty: wgpu::BufferBindingType::Storage { read_only: true },
+                },
+            },
+            wgpu::BindGroupLayoutEntry {
+                binding: 2,
+                count: None,
+                visibility: wgpu::ShaderStages::COMPUTE,
+                ty: wgpu::BindingType::Buffer {
+                    has_dynamic_offset: false,
+                    min_binding_size: Some(NonZeroU64::new(1).unwrap()),
+                    ty: wgpu::BufferBindingType::Storage { read_only: true },
+                },
+            },
         ],
     });
 
@@ -98,13 +118,13 @@ pub async fn match_freq(
     let words_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         label: Some("Words"),
         contents: bytemuck::cast_slice(words),
-        usage: wgpu::BufferUsages::STORAGE | wgpu::BufferUsages::UNIFORM,
+        usage: wgpu::BufferUsages::STORAGE,
     });
 
     let patterns_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         label: Some("Patterns"),
         contents: bytemuck::cast_slice(patterns),
-        usage: wgpu::BufferUsages::STORAGE | wgpu::BufferUsages::UNIFORM,
+        usage: wgpu::BufferUsages::STORAGE,
     });
 
     let bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
